@@ -128,11 +128,9 @@ unsorted_numbers=$(jot -r 3000 1 1000 | tr '\n' ' ')
 
 my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
 echo $my_result > ./tester/my_result.txt
-cat ./tester/my_result.txt
 
 sort_result=$(echo "$unsorted_numbers" | tr " " "\n" | sort -n)
 echo $sort_result > ./tester/sort_result.txt
-cat ./tester/sort_result.txt
 
 comparation_result=$(diff ./tester/sort_result.txt ./tester/my_result.txt | wc -l)
 
@@ -182,20 +180,6 @@ if [ $result != 0 ]; then
     echo -e "\033[32mTEST NEGATIVE NUMBER PASSED!\033[0m"
 else
 	echo -e "\033[31mTEST NEGATIVE NUMBER FAILED!\033[0m"
-fi
-
-# DUPLICATED NUMBER TEST #
-unsorted_numbers="3 3 2 1"
-
-my_result=$(./PmergeMe $unsorted_numbers | grep "Error")
-echo $my_result > ./tester/my_result.txt
-
-result=$(cat ./tester/my_result.txt | grep "Error"  | wc -l)
-
-if [ $result != 0 ]; then
-    echo -e "\033[32mTEST DUPLICATE NUMBER PASSED!\033[0m"
-else
-	echo -e "\033[31mTEST DUPLICATE NUMBER FAILED!\033[0m"
 fi
 
 # NOT A NUMBER TEST #
