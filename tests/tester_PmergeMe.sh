@@ -22,7 +22,7 @@ else
 fi
 
 # NORMAL TEST #
-unsorted_numbers=$(shuf -i 1-100000 -n 500 | tr "\n" " ")
+unsorted_numbers=$(jot -r 500 1 100000 | tr '\n' ' ')
 
 my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
 echo $my_result > ./tester/my_result.txt
@@ -38,8 +38,25 @@ else
 	echo -e "\033[31mTEST 500 UNSORTED NUMBERS FAILED!\033[0m"
 fi
 
-# MEDIUM TEST #
-unsorted_numbers=$(shuf -i 1-100000 -n 1000 | tr "\n" " ")
+# NORMAL TEST WITH SHUF#
+unsorted_numbers=$(shuf -i 1-100000 -n 500 | tr "\n" " ")
+
+my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
+echo $my_result > ./tester/my_result.txt
+
+sort_result=$(echo "$unsorted_numbers" | tr " " "\n" | sort -n)
+echo $sort_result > ./tester/sort_result.txt
+
+comparation_result=$(diff ./tester/sort_result.txt ./tester/my_result.txt | wc -l)
+
+if [ $comparation_result -eq 0 ]; then
+    echo -e "\033[32mTEST 500 UNSORTED NUMBERS WITH SHUF PASSED!\033[0m"
+else
+	echo -e "\033[31mTEST 500 UNSORTED NUMBERS WITH SHUF FAILED!\033[0m"
+fi
+
+# NORMAL TEST #
+unsorted_numbers=$(jot -r 1000 1 100000 | tr '\n' ' ')
 
 my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
 echo $my_result > ./tester/my_result.txt
@@ -55,8 +72,25 @@ else
 	echo -e "\033[31mTEST 1000 UNSORTED NUMBERS FAILED!\033[0m"
 fi
 
+# MEDIUM TEST WITH SHUF #
+unsorted_numbers=$(shuf -i 1-100000 -n 1000 | tr "\n" " ")
+
+my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
+echo $my_result > ./tester/my_result.txt
+
+sort_result=$(echo "$unsorted_numbers" | tr " " "\n" | sort -n)
+echo $sort_result > ./tester/sort_result.txt
+
+comparation_result=$(diff ./tester/sort_result.txt ./tester/my_result.txt | wc -l)
+
+if [ $comparation_result -eq 0 ]; then
+    echo -e "\033[32mTEST 1000 UNSORTED NUMBERS WITH SHUF PASSED!\033[0m"
+else
+	echo -e "\033[31mTEST 1000 UNSORTED NUMBERS WITH SHUF FAILED!\033[0m"
+fi
+
 # COMPLEX TEST #
-unsorted_numbers=$(shuf -i 1-100000 -n 3000 | tr "\n" " ")
+unsorted_numbers=$(jot -r 3000 1 100000 | tr '\n' ' ')
 
 my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
 echo $my_result > ./tester/my_result.txt
@@ -70,6 +104,42 @@ if [ $comparation_result -eq 0 ]; then
     echo -e "\033[32mTEST 3000 UNSORTED NUMBERS PASSED!\033[0m"
 else
 	echo -e "\033[31mTEST 3000 UNSORTED NUMBERS FAILED!\033[0m"
+fi
+
+# COMPLEX TEST WITH SHUF #
+unsorted_numbers=$(shuf -i 1-100000 -n 3000 | tr "\n" " ")
+
+my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
+echo $my_result > ./tester/my_result.txt
+
+sort_result=$(echo "$unsorted_numbers" | tr " " "\n" | sort -n)
+echo $sort_result > ./tester/sort_result.txt
+
+comparation_result=$(diff ./tester/sort_result.txt ./tester/my_result.txt | wc -l)
+
+if [ $comparation_result -eq 0 ]; then
+    echo -e "\033[32mTEST 3000 UNSORTED NUMBERS WITH SHUF PASSED!\033[0m"
+else
+	echo -e "\033[31mTEST 3000 UNSORTED NUMBERS WITH SHUF FAILED!\033[0m"
+fi
+
+# SUBJECT TEST #
+unsorted_numbers=$(jot -r 3000 1 1000 | tr '\n' ' ')
+
+my_result=$(./PmergeMe $unsorted_numbers | grep "After:	" | sed 's/After:	//')
+echo $my_result > ./tester/my_result.txt
+cat ./tester/my_result.txt
+
+sort_result=$(echo "$unsorted_numbers" | tr " " "\n" | sort -n)
+echo $sort_result > ./tester/sort_result.txt
+cat ./tester/sort_result.txt
+
+comparation_result=$(diff ./tester/sort_result.txt ./tester/my_result.txt | wc -l)
+
+if [ $comparation_result -eq 0 ]; then
+    echo -e "\033[32mTEST FROM SUBJECT PASSED!\033[0m"
+else
+	echo -e "\033[31mTEST FROM SUBJECT NUMBERS FAILED!\033[0m"
 fi
 
 # OVERFLOW TEST #
